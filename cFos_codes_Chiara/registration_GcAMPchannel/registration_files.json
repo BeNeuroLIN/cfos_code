@@ -1,0 +1,14 @@
+[
+    {
+        "reference_image_path":"/local/test/reference",
+        "reference_image_file":"reference_brain",
+        "moving_image_path":"/local/test/D2",
+        "moving_image_names":["af10_anato"]
+    },
+    {
+        "reference_image_path":"/local/test/reference",
+        "reference_image_file":"reference_brain",
+        "moving_image_path":"/local/test/D2",
+        "moving_image_names":["zinc1-af10_anato"]
+    }  
+]

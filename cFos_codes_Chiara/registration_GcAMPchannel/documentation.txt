@@ -1,0 +1,51 @@
+------------------Installation instructions--------------------------
+
+install AnTs (https://github.com/ANTsX/ANTs/wiki/Compiling-ANTs-on-Linux-and-Mac-OS#get-the-latest-code)
+install anaconda (https://docs.anaconda.com/anaconda/install/index.html)
+
+conda create -n antsreg
+conda activate antsreg
+pip install pynrrd json numpy pathlib
+
+
+------------------Json file description------------------------------
+Format :   All the references and moving files should be in "nrrd" format. 
+
+(-reference_image_path)     path of the reference image
+(-reference_image_file)     name of the reference file without extension
+(-moving_image_path)        path of the moving images
+(-moving_image_names)       list of the moving images
+
+
+------------------How to run-------------------------------------------
+
+conda activate antsreg
+export ANTS_BIN_PATH= "/local/ants/bin"         # Please provide your local bin path here
+export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=32  # Based on numbers of cores available
+
+python registration_code.py registration_files.json
+
+
+
+------------------Registration parameters description----------------
+
+(-f)    Fixed or reference image
+(-m)    Moving or unregistered image
+(-d)    dimension
+(-n)    interpolation method e.g. linear, cubic etc 
+(-t)    Name of the transformation e.g. rigid, affine, SyN 
+(-f)    Smoothing Factor: is used for smoothing the down-sampled image with a gaussian kernel. This parameter is dependent on the shrinking factor. For example if the shrinking factor is 2 then smoothing factor will be 0.2
+        Formula used: (shrinking factor[d] -1)*0.2.
+(-s)    ShrinkingFactor: is used for down-sampling an unregistered image. They are forming a kind of image pyramid for unregistered images and apply the above algorithms on each of the images in the pyramid. 
+        Shrinking factor totally depends on the size of your image stack. For example: 700x700x29 is the size of our 2P stack and 4x2x1 is the shrinking factor. It will down-sample the image by factors of 4x4x4 , 2x2x2 and 1x1x1. One should be careful in setting this parameter because it also checks length of minimum dimension i.e 29 in our case because if you downscale such a small z by a power of 8 or more. we will be left with almost nothing and a lot of resources will be wasted. It should also be a power of 2 like 2,4,8,16,32 etc.In most of the scenarios, down-sampling upto 8 is enough.
+(-m)    Similarity Metrics:It is the critical step in the registration process which matches how well the target dataset is matched with referenced or fixed dataset. There is no fixed rule to select the metric, it totally depends on conditions like algorithm, dataset etc.
+        Generally, Mutual Information(MI) is preferred for linear transform and Cross-correlation(CC) is useful for fine scale non-linear registration steps.
+        Mutal Information(MI)
+        Cross-correlation(CC)
+        Probabilistic Matching (PB)
+        Mean Square Distance(MSQ)
+        Point-set Expectation(PSE)
+        Global correlation(GC)
+
+
+
